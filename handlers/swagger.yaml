@@ -1,0 +1,94 @@
+openapi: 3.0.1
+info:
+  title: Star Wars Characters API
+  description: API para interactuar con datos de personajes de Star Wars.
+  version: "1.0.0"
+servers:
+  - url: https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev
+    description: Servidor de producción
+
+paths:
+  /character/{id}:
+    get:
+      summary: Obtiene la información de un personaje específico.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: El ID del personaje a recuperar.
+      responses:
+        '200':
+          description: Datos del personaje.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '404':
+          description: Personaje no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /character:
+    post:
+      summary: Crea un nuevo personaje en la base de datos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCharacter'
+      responses:
+        '200':
+          description: Personaje creado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+        '500':
+          description: Error al crear el personaje.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Character:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identificador único del personaje.
+        nombre:
+          type: string
+          description: Nombre del personaje.
+        altura:
+          type: string
+          description: Altura del personaje.
+        masa:
+          type: string
+          description: Masa del personaje.
+
+    NewCharacter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del personaje.
+        height:
+          type: string
+          description: Altura del personaje.
+        mass:
+          type: string
+          description: Masa del personaje.
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Mensaje de error detallando lo que salió mal.

@@ -1,0 +1,77 @@
+service: my-serverless-api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: dev
+  region: us-east-1
+  environment:
+    DYNAMODB_TABLE: "StarWarsEntities"
+
+  # Políticas IAM para acceder a DynamoDB
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:Query"
+        - "dynamodb:Scan"
+        - "dynamodb:GetItem"
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:DeleteItem"
+      Resource: "arn:aws:dynamodb:us-east-1:503341058187:table/StarWarsEntities"
+
+functions:
+  createCharacter:
+    handler: handlers/handler.createCharacter
+    events:
+      - http:
+          path: characters
+          method: post
+          cors: true
+
+  getCharacter:
+    handler: handlers/handler.getCharacter
+    events:
+      - http:
+          path: characters/{id}
+          method: get
+          cors: true
+          
+  serveSwagger:
+    handler: handlers/handler.serveSwagger
+    events:
+      - http:
+          path: /swagger/{proxy+}
+          method: any
+          cors: true
+          authorizer: null
+      - http:
+          path: /swagger
+          method: get
+          cors: true
+          authorizer: null
+      - http:
+          path: /swagger/swagger.yaml
+          method: get
+          cors: true
+          authorizer: null
+
+resources:
+  Resources:
+    StarWarsEntities:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: "StarWarsEntities"
+        AttributeDefinitions:
+          - AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "id"
+            KeyType: "HASH"
+        BillingMode: PAY_PER_REQUEST
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - 'node_modules/aws-sdk/**'
