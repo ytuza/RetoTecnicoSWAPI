@@ -61,8 +61,31 @@ Para acceder a la documentación de la API y probar los endpoints, navega a:
 
 ## Endpoints
 
-  POST - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/characters
-  GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/characters/{id}
-  GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/swagger
-  GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/swagger/swagger.yaml
+- POST - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/characters
+- GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/characters/{id}
+- GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/swagger
+- GET - https://8dbfcyyava.execute-api.us-east-1.amazonaws.com/dev/swagger/swagger.yaml
 
+# Documentación de Pruebas para el Proyecto
+
+## Ejecución de Pruebas
+
+Ejecuta las pruebas utilizando Jest con el comando:
+```bash
+npm test
+```
+
+## Casos de Prueba
+
+### Función `createCharacter`
+
+- **Caso de Éxito**: Prueba que un personaje puede ser creado exitosamente en DynamoDB.
+- **Manejo de Errores**: Prueba que los errores son manejados adecuadamente si la escritura en DynamoDB falla.
+
+### Función `getCharacter`
+
+- **Caso de Éxito**: Prueba la recuperación de un personaje directamente desde DynamoDB.
+- **Recuperación desde SWAPI**: Prueba la recuperación desde SWAPI y el almacenamiento subsiguiente en DynamoDB cuando el personaje no se encuentra en DynamoDB.
+- **Manejo de No Encontrado**: Prueba la respuesta cuando un personaje no se encuentra en DynamoDB ni en SWAPI.
+
+Cada función se prueba para asegurar que maneja los casos esperados y los casos límite de manera efectiva.
